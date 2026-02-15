@@ -58,7 +58,8 @@ description: "帮助用户在 Docker 环境中开发、编译和运行 UniProton
 - 进入应用目录: `cd UniProton/demos/riscv64virt/apps/`
 - 创建新的应用目录: `mkdir <your_app_name>`
 - 在新目录中创建 main.c 和 CMakeLists.txt 文件
-- 从已有应用（如hello_world）复制console.h和console.c文件到新应用目录
+- 参考 UniProton/demos/riscv64virt/apps/hello_world 来创建 app，但是 console 部分如果不需要，就不要添加进去
+- 从已有应用（如hello_world）复制console.h和console.c文件到新应用目录（仅在需要控制台功能时）
 
 ### 3. 配置新应用程序
 - 此步骤在Host上完成
@@ -152,6 +153,8 @@ description: "帮助用户在 Docker 环境中开发、编译和运行 UniProton
 - 在编译前检查文件权限: `ls -la` 
 - 使用`find`命令定位头文件位置
 - 检查CMakeLists.txt的include路径设置
+- 构建或者运行遇到问题的时候，通过加入必要的调试信息打印来确认运行的位置和问题所在，根据切实的输出来推断问题，解决问题
+- 如果有配套的调试工具，也要用起来，例如 qemu 的 monitor 功能，可以获取相关的信息
 
 ## 成功验证
 - 编译成功完成，没有错误
