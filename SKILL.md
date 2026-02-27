@@ -13,6 +13,21 @@ description: "帮助用户在 Docker 环境中开发、编译和运行 UniProton
 3. 运行和调试 UniProton 应用
 4. 解决开发过程中的常见问题
 
+## 操作记录要求
+
+使用此技能执行任何操作时，必须详细记录以下信息：
+- **项目**：操作所属的项目名称
+- **时间**：操作执行的时间戳
+- **Skill**：执行操作的技能名称，对于技能以外的操作标记为"外部操作"
+- **目的**：执行此操作的原因和目标
+- **命令**：执行的具体命令
+- **参数**：命令的参数和选项
+- **执行结果**：命令的输出和执行状态
+- **处理**：对执行结果的处理方式
+- **方案**：采用的解决方案
+
+所有操作记录必须按照时间顺序保存在 `skill_run_history.md` 文件中，确保完整记录整个开发过程。`skill_run_history.md` 文件按照模版`skill_run_history_template.md` 文件来构建，skill_run_history_template.md在references目录。对于多个项目的操作，应按项目分组管理，便于查找和分析。
+
 ## 环境配置
 
 ### Docker 环境配置要求
@@ -92,10 +107,12 @@ description: "帮助用户在 Docker 环境中开发、编译和运行 UniProton
 ### 5. 运行与验证
 - 此步骤在Docker容器内完成
 - 进入输出目录: `cd UniProton/demos/riscv64virt/build/out/`
-- 使用 QEMU 模拟器运行程序: 
+- 使用 QEMU 模拟器运行程序，必须添加超时设置: 
   ```bash
-  /opt/qemu/bin/qemu-system-riscv64 -bios none -M virt -m 512M -nographic -kernel <your_app_name>.elf -smp 1
+  timeout 30 /opt/qemu/bin/qemu-system-riscv64 -bios none -M virt -m 512M -nographic -kernel <your_app_name>.elf -smp 1
   ```
+  - `timeout 30`: 设置30秒超时，避免程序无响应时Docker容器卡住
+  - 根据应用程序的预期运行时间，合理调整超时时间
 - 观察程序输出，确认成功运行
 
 ## 技术细节
@@ -134,6 +151,7 @@ description: "帮助用户在 Docker 环境中开发、编译和运行 UniProton
 - **QEMU路径**: 确认使用完整路径`/opt/qemu/bin/qemu-system-riscv64`
 - **ELF文件存在**: 检查out目录下是否生成了正确的ELF文件
 - **内存配置**: 验证QEMU内存设置为至少512M
+- **超时设置**: 如果应用程序运行时间较长，需要适当增加timeout命令的超时时间，例如：`timeout 60 <qemu_command>`
 
 ### 特殊问题
 - **CSR寄存器访问**: 如果使用RISC-V CSR寄存器访问函数（如r_mhartid等），确保包含正确的头文件
